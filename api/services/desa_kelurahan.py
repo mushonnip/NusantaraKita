@@ -1,21 +1,24 @@
 import aiomysql
 from typing import List, Union
 from config import get_connection
-from models.desa_kelurahan import DesaKelurahan, DesaKelurahanListResponse, PaginatedDesaKelurahanResponse
+from models.desa_kelurahan import (
+    DesaKelurahan,
+    DesaKelurahanListResponse,
+    PaginatedDesaKelurahanResponse,
+)
 
 
 class DesaKelurahanService:
     async def get(
-            self, 
-            limit: int, 
-            halaman: int, 
-            pagination: bool
-            ) -> Union[DesaKelurahanListResponse, PaginatedDesaKelurahanResponse]:
+        self, limit: int, halaman: int, pagination: bool
+    ) -> Union[DesaKelurahanListResponse, PaginatedDesaKelurahanResponse]:
         conn = await get_connection()
         async with conn.cursor(aiomysql.DictCursor) as cursor:
             try:
                 if not pagination:
-                    await cursor.execute("SELECT kode, nama, lat, lng, kode_kecamatan FROM nk_desa_kelurahan")
+                    await cursor.execute(
+                        "SELECT kode, nama, lat, lng, kode_kecamatan FROM nk_desa_kelurahan"
+                    )
                     data: List[DesaKelurahan] = await cursor.fetchall()
                     if not data:
                         raise Exception("tidak ditemukan data")
@@ -37,7 +40,8 @@ class DesaKelurahanService:
 
                 offset: int = (halaman - 1) * limit
                 await cursor.execute(
-                    "SELECT kode, nama, lat, lng, kode_kecamatan FROM nk_desa_kelurahan LIMIT %s OFFSET %s", (limit, offset)
+                    "SELECT kode, nama, lat, lng, kode_kecamatan FROM nk_desa_kelurahan LIMIT %s OFFSET %s",
+                    (limit, offset),
                 )
                 data: List[DesaKelurahan] = await cursor.fetchall()
 
@@ -57,40 +61,44 @@ class DesaKelurahanService:
                 conn.close()
 
     async def get_by_kecamatan(
-            self, 
-            kode_kecamatan: str, 
-            limit: int, 
-            halaman: int, 
-            pagination: bool
-            ) -> Union[DesaKelurahanListResponse, PaginatedDesaKelurahanResponse]:
+        self, kode_kecamatan: str, limit: int, halaman: int, pagination: bool
+    ) -> Union[DesaKelurahanListResponse, PaginatedDesaKelurahanResponse]:
         conn = await get_connection()
         async with conn.cursor(aiomysql.DictCursor) as cursor:
             try:
                 if not pagination:
-                    await cursor.execute("SELECT kode, nama, lat, lng, kode_kecamatan FROM nk_desa_kelurahan WHERE kode_kecamatan = %s", 
-                                         (kode_kecamatan,))
+                    await cursor.execute(
+                        "SELECT kode, nama, lat, lng, kode_kecamatan FROM nk_desa_kelurahan WHERE kode_kecamatan = %s",
+                        (kode_kecamatan,),
+                    )
                     data: List[DesaKelurahan] = await cursor.fetchall()
                     if not data:
-                        raise Exception("tidak ditemukan data untuk kode provinsi tersebut")
+                        raise Exception(
+                            "tidak ditemukan data untuk kode provinsi tersebut"
+                        )
                     return {"data": data}
 
                 if halaman <= 0:
-                    raise Exception("nomor halaman tidak valid, halaman harus lebih besar dari 0")
+                    raise Exception(
+                        "nomor halaman tidak valid, halaman harus lebih besar dari 0"
+                    )
 
                 await cursor.execute(
                     "SELECT COUNT(*) AS total FROM nk_desa_kelurahan WHERE kode_kecamatan = %s",
-                    (kode_kecamatan,)
+                    (kode_kecamatan,),
                 )
                 total_item: int = (await cursor.fetchone())["total"]
                 total_halaman: int = -(-total_item // limit)
 
                 if halaman > total_halaman:
-                    raise Exception(f"nomor halaman melebihi total halaman. Halaman maksimum adalah {total_halaman}")
+                    raise Exception(
+                        f"nomor halaman melebihi total halaman. Halaman maksimum adalah {total_halaman}"
+                    )
 
                 offset: int = (halaman - 1) * limit
                 await cursor.execute(
                     "SELECT kode, nama, lat, lng, kode_kecamatan FROM nk_desa_kelurahan WHERE kode_kecamatan = %s LIMIT %s OFFSET %s",
-                    (kode_kecamatan, limit, offset)
+                    (kode_kecamatan, limit, offset),
                 )
                 data: List[DesaKelurahan] = await cursor.fetchall()
 

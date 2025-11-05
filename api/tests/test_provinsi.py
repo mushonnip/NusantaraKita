@@ -3,19 +3,15 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from services.provinsi import ProvinsiService
 
 mock_data = [
-    {
-        "kode": "11",
-        "nama": "Aceh",
-        "lat": 4.225728583038235,
-        "lng": 96.9063499723947
-    },
+    {"kode": "11", "nama": "Aceh", "lat": 4.225728583038235, "lng": 96.9063499723947},
     {
         "kode": "12",
         "nama": "Sumatera Utara",
         "lat": 2.1884379790819697,
-        "lng": 99.63567390209315
-    }
+        "lng": 99.63567390209315,
+    },
 ]
+
 
 @pytest.mark.asyncio
 async def test_get_without_pagination():
@@ -38,6 +34,7 @@ async def test_get_without_pagination():
         assert isinstance(result["data"][0]["lat"], float)
         assert isinstance(result["data"][0]["lng"], float)
 
+
 @pytest.mark.asyncio
 async def test_get_with_pagination_valid():
     paginated_data = [mock_data[1]]
@@ -59,6 +56,7 @@ async def test_get_with_pagination_valid():
         assert result["pagination"]["halaman_saat_ini"] == 1
         assert result["data"] == paginated_data
 
+
 @pytest.mark.asyncio
 async def test_get_invalid_page_number():
     mock_cursor = AsyncMock()
@@ -74,4 +72,3 @@ async def test_get_invalid_page_number():
         with pytest.raises(Exception) as exc_info:
             await service.get(limit=2, halaman=10, pagination=True)
         assert "nomor halaman melebihi total halaman" in str(exc_info.value)
-

@@ -1,6 +1,7 @@
 from typing import TypedDict, List
 from .pagination import PaginationMeta
 
+
 class DesaKelurahan(TypedDict):
     """
     Struktur data untuk response daftar desa/kelurahan.
@@ -12,11 +13,13 @@ class DesaKelurahan(TypedDict):
         lng (float): Longitude dari lokasi desa/kelurahan.
         kode_kecamatan (str): Kode kecamatan tempat desa/kelurahan berada.
     """
+
     kode: str
     nama: str
     lat: float
     lng: float
     kode_kecamatan: str
+
 
 class PaginatedDesaKelurahanResponse(TypedDict):
     """
@@ -26,8 +29,10 @@ class PaginatedDesaKelurahanResponse(TypedDict):
         pagination (PaginationMeta): Informasi metadata pagination.
         data (List[DesaKelurahan]): Daftar desa/kelurahan.
     """
+
     pagination: PaginationMeta
     data: List[DesaKelurahan]
+
 
 class DesaKelurahanListResponse(TypedDict):
     """
@@ -36,4 +41,5 @@ class DesaKelurahanListResponse(TypedDict):
     Attributes:
         data (List[DesaKelurahan]): Daftar desa/kelurahan.
     """
+
     data: List[DesaKelurahan]

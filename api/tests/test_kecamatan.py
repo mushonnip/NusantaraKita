@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
-from services.kecamatan import KecamatanService 
+from services.kecamatan import KecamatanService
 
 mock_data = [
     {
@@ -16,8 +16,9 @@ mock_data = [
         "nama": "Kluet Utara",
         "lat": 3.123248075034301,
         "lng": 97.34619985236354,
-    }
+    },
 ]
+
 
 @pytest.mark.asyncio
 async def test_get_without_pagination():
@@ -92,7 +93,9 @@ async def test_get_by_kabupaten_kota_without_pagination():
 
     with patch("services.kecamatan.get_connection", return_value=mock_conn):
         service = KecamatanService()
-        result = await service.get_by_kabupaten_kota(kode_kabupaten_kota="11.01", limit=10, halaman=1, pagination=False)
+        result = await service.get_by_kabupaten_kota(
+            kode_kabupaten_kota="11.01", limit=10, halaman=1, pagination=False
+        )
 
         assert "data" in result
         assert all(item["kode_kabupaten_kota"] == "11.01" for item in result["data"])
@@ -112,7 +115,9 @@ async def test_get_by_kabupaten_kota_with_pagination_valid():
 
     with patch("services.kecamatan.get_connection", return_value=mock_conn):
         service = KecamatanService()
-        result = await service.get_by_kabupaten_kota(kode_kabupaten_kota="11.01", limit=1, halaman=1, pagination=True)
+        result = await service.get_by_kabupaten_kota(
+            kode_kabupaten_kota="11.01", limit=1, halaman=1, pagination=True
+        )
 
         assert "pagination" in result
         assert result["pagination"]["total_item"] == 1
@@ -133,5 +138,7 @@ async def test_get_by_kabupaten_kota_invalid_page_number():
     with patch("services.kecamatan.get_connection", return_value=mock_conn):
         service = KecamatanService()
         with pytest.raises(Exception) as exc_info:
-            await service.get_by_kabupaten_kota(kode_kabupaten_kota="11.01", limit=2, halaman=10, pagination=True)
+            await service.get_by_kabupaten_kota(
+                kode_kabupaten_kota="11.01", limit=2, halaman=10, pagination=True
+            )
         assert "nomor halaman melebihi total halaman" in str(exc_info.value)

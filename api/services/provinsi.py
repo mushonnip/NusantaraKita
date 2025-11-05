@@ -6,16 +6,15 @@ from models.provinsi import Provinsi, ProvinsiListResponse, PaginatedProvinsiRes
 
 class ProvinsiService:
     async def get(
-            self, 
-            limit: int, 
-            halaman: int, 
-            pagination: bool
-            ) -> Union[ProvinsiListResponse, PaginatedProvinsiResponse]:
+        self, limit: int, halaman: int, pagination: bool
+    ) -> Union[ProvinsiListResponse, PaginatedProvinsiResponse]:
         conn = await get_connection()
         async with conn.cursor(aiomysql.DictCursor) as cursor:
             try:
                 if not pagination:
-                    await cursor.execute("SELECT kode, nama, lat, lng  FROM nk_provinsi")
+                    await cursor.execute(
+                        "SELECT kode, nama, lat, lng  FROM nk_provinsi"
+                    )
                     data: List[Provinsi] = await cursor.fetchall()
                     if not data:
                         raise Exception("tidak ditemukan data")
@@ -37,7 +36,8 @@ class ProvinsiService:
 
                 offset: int = (halaman - 1) * limit
                 await cursor.execute(
-                    "SELECT kode, nama, lat, lng FROM nk_provinsi LIMIT %s OFFSET %s", (limit, offset)
+                    "SELECT kode, nama, lat, lng FROM nk_provinsi LIMIT %s OFFSET %s",
+                    (limit, offset),
                 )
                 data: List[Provinsi] = await cursor.fetchall()
 

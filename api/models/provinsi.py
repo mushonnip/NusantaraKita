@@ -1,6 +1,7 @@
 from typing import TypedDict, List
 from .pagination import PaginationMeta
 
+
 class Provinsi(TypedDict):
     """
     Struktur data untuk response daftar provinsi.
@@ -11,10 +12,12 @@ class Provinsi(TypedDict):
         lat (float): Latitude dari lokasi provinsi.
         lng (float): Longitude dari lokasi provinsi.
     """
+
     kode: str
     nama: str
     lat: float
     lng: float
+
 
 class PaginatedProvinsiResponse(TypedDict):
     """
@@ -24,8 +27,10 @@ class PaginatedProvinsiResponse(TypedDict):
         pagination (PaginationMeta): Informasi metadata pagination.
         data (List[Provinsi]): Daftar Provinsi.
     """
+
     pagination: PaginationMeta
     data: List[Provinsi]
+
 
 class ProvinsiListResponse(TypedDict):
     """
@@ -34,4 +39,5 @@ class ProvinsiListResponse(TypedDict):
     Attributes:
         data (List[Provinsi]): Daftar Provinsi.
     """
+
     data: List[Provinsi]
