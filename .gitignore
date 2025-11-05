@@ -70,6 +70,7 @@ instance/
 .pyright/
 .dmypy.json
 .pyre/
+.ruff_cache/
 
 # Pyre type checker
 .pyre/
