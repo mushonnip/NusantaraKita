@@ -1,4 +1,5 @@
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Globe } from 'lucide-react';
 import { useMemo } from 'react';
 import {
   FaArrowsAltH,
@@ -31,6 +32,7 @@ const KecamatanTableHeaders = [
   'Nama Kecamatan',
   'Latitude',
   'Longitude',
+  'geojson_url',
 ];
 
 const parseKecamatanTable = (kecamatan: KecamatanApi) => ({
@@ -39,6 +41,7 @@ const parseKecamatanTable = (kecamatan: KecamatanApi) => ({
   'Nama Kecamatan': kecamatan.nama,
   Latitude: kecamatan.lat,
   Longitude: kecamatan.lng,
+  geojson_url: kecamatan.geojson_url,
 });
 
 const parseKecamatanCard = (kecamatan: KecamatanApi) => [
@@ -67,6 +70,11 @@ const parseKecamatanCard = (kecamatan: KecamatanApi) => [
     icon: FaArrowsAltH,
     title: 'Longitude',
     value: kecamatan.lng.toString(),
+  },
+  {
+    icon: Globe,
+    title: 'geojson_url',
+    value: kecamatan.geojson_url.toString(),
   },
 ];
 
