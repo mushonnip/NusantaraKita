@@ -90,9 +90,7 @@ export const InstalationGuide = () => {
         </div>
 
         <div className="mb-6">
-          <p className="mb-4 leading-relaxed text-gray-600">
-            Jalankan Project
-          </p>
+          <p className="mb-4 leading-relaxed text-gray-600">Jalankan Project</p>
           <Code
             content={`uvicorn main:app --reload`}
             showCopyButton
@@ -100,9 +98,7 @@ export const InstalationGuide = () => {
         </div>
 
         <div className="mb-6">
-          <p className="mb-4 leading-relaxed text-gray-600">
-            Testing Project
-          </p>
+          <p className="mb-4 leading-relaxed text-gray-600">Testing Project</p>
           <Code
             content={`pytest tests/`}
             showCopyButton
