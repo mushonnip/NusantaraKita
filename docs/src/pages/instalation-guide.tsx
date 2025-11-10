@@ -38,22 +38,15 @@ export const InstalationGuide = () => {
         />
       </div>
 
-      {/* Section Masuk API Directory */}
-      <div className="mb-10">
-        <h2 className="mb-4 text-xl font-semibold text-gray-600">
-          Masuk ke Direktori API
+      {/* Section Setup Env */}
+      <div className="mb-10 space-y-4">
+        <h2 className="text-xl font-semibold text-gray-600">
+          Setup Environment
         </h2>
         <Code
           content={`cd api`}
           showCopyButton
         />
-      </div>
-
-      {/* Section Setup Env */}
-      <div className="mb-10">
-        <h2 className="mb-4 text-xl font-semibold text-gray-600">
-          Setup Environment
-        </h2>
         <Code
           content={`cp .env.example .env`}
           showCopyButton
@@ -67,9 +60,9 @@ export const InstalationGuide = () => {
         </h2>
 
         <div className="mb-6">
-          <h3 className="mb-2 text-lg font-medium text-gray-600">
+          <p className="mb-4 leading-relaxed text-gray-600">
             Buat Virtual Environment
-          </h3>
+          </p>
           <Code
             content={`python -m venv venv`}
             showCopyButton
@@ -77,9 +70,9 @@ export const InstalationGuide = () => {
         </div>
 
         <div className="mb-6">
-          <h3 className="mb-2 text-lg font-medium text-gray-600">
+          <p className="mb-4 leading-relaxed text-gray-600">
             Aktifkan Virtual Environment
-          </h3>
+          </p>
           <Code
             content={`source venv/bin/activate`}
             showCopyButton
@@ -87,9 +80,9 @@ export const InstalationGuide = () => {
         </div>
 
         <div className="mb-6">
-          <h3 className="mb-2 text-lg font-medium text-gray-600">
+          <p className="mb-4 leading-relaxed text-gray-600">
             Install Dependencies
-          </h3>
+          </p>
           <Code
             content={`pip install -r requirements.txt`}
             showCopyButton
@@ -97,9 +90,9 @@ export const InstalationGuide = () => {
         </div>
 
         <div className="mb-6">
-          <h3 className="mb-2 text-lg font-medium text-gray-600">
+          <p className="mb-4 leading-relaxed text-gray-600">
             Jalankan Project
-          </h3>
+          </p>
           <Code
             content={`uvicorn main:app --reload`}
             showCopyButton
@@ -107,9 +100,9 @@ export const InstalationGuide = () => {
         </div>
 
         <div className="mb-6">
-          <h3 className="mb-2 text-lg font-medium text-gray-600">
+          <p className="mb-4 leading-relaxed text-gray-600">
             Testing Project
-          </h3>
+          </p>
           <Code
             content={`pytest tests/`}
             showCopyButton
@@ -128,6 +121,13 @@ export const InstalationGuide = () => {
         </p>
         <Code
           content={`docker-compose up -d`}
+          showCopyButton
+        />
+        <p className="my-4 leading-relaxed text-gray-600">
+          atau gunakan perintah ini untuk memperbarui docker image:
+        </p>
+        <Code
+          content={`docker-compose pull && docker-compose up -d`}
           showCopyButton
         />
       </div>
