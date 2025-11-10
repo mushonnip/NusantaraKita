@@ -51,13 +51,11 @@ Git clone API nya:
 git clone --filter=blob:none --no-checkout https://github.com/Yuefii/NusantaraKita.git && cd NusantaraKita && git sparse-checkout set api data && git checkout
 ```
 
-Masuk ke directori API:
+Setup Environmentnya:
 
 ```bash
 cd api
 ```
-
-Setup Environmentnya:
 
 ```bash
 cp .env.example .env
@@ -77,11 +75,11 @@ Menjalankan Projectnya menggunakan `pip`
   ```bash
   pip install -r requirements.txt
   ```
-- Running project:
+- running project:
   ```bash
   uvicorn main:app --reload
   ```
-- Testing project:
+- testing project:
   ```bash
   pytest tests/
   ```
