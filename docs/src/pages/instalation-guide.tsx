@@ -116,14 +116,15 @@ export const InstalationGuide = () => {
           />
         </div>
       </div>
-      
+
       {/* Section Running API with Docker */}
       <div className="mb-10">
         <h2 className="mb-4 text-xl font-semibold text-gray-600">
           Menjalankan Project dengan Docker
         </h2>
         <p className="mb-4 leading-relaxed text-gray-600">
-          Setelah clone project kamu bisa menjalankan project dengan mudah menggunakan perintah:
+          Setelah clone project kamu bisa menjalankan project dengan mudah
+          menggunakan perintah:
         </p>
         <Code
           content={`docker-compose up -d`}

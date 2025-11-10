@@ -41,7 +41,7 @@ export function NavSourceCode() {
                       !open && 'hidden',
                     )}
                   >
-                   CONTRIBUTING 
+                    CONTRIBUTING
                   </span>
                 </div>
               </SidebarMenuButton>
