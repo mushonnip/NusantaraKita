@@ -40,7 +40,7 @@ export function SidebarLogo() {
                 <span className="truncate text-base font-medium">
                   Nusantara Kita
                 </span>
-                <span className="truncate text-xs">v2.0</span>
+                <span className="truncate text-xs">v2.1</span>
               </div>
             </SidebarMenuButton>
           </DropdownMenuTrigger>
