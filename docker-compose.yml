@@ -21,9 +21,7 @@ services:
       retries: 10
 
   api:
-    build:
-      context: ./api
-      network: host
+    image: yuefii/nusantarakita-api:latest
     container_name: nusantarakita_api
     restart: always
     ports:
