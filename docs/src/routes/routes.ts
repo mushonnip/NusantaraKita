@@ -8,7 +8,6 @@ import { GetProvinsi } from '@/pages/get-provinsi';
 import { InstalationGuide } from '@/pages/instalation-guide';
 import { KabupatenKota } from '@/pages/kabupaten-kota';
 import { Kecamatan } from '@/pages/kecamatan';
-import MainFeatures from '@/pages/main-features';
 import Overview from '@/pages/overview';
 import { Provinsi } from '@/pages/provinsi';
 import { createBrowserRouter } from 'react-router';
@@ -21,7 +20,6 @@ export const routers = createBrowserRouter([
     children: [
       { path: '/', Component: Overview },
       { path: '/tentang-api', Component: AboutApi },
-      { path: '/fitur-utama', Component: MainFeatures },
       { path: '/paduan-instalasi', Component: InstalationGuide },
       {
         path: '/api-documentation',

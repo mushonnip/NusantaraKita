@@ -23,7 +23,6 @@ const navMenus: NavMenuGroup[] = [
     items: [
       { title: 'Overview', url: '/' },
       { title: 'Tentang API', url: '/tentang-api' },
-      { title: 'Fitur Utama', url: '/fitur-utama' },
       { title: 'Panduan Instalasi', url: '/paduan-instalasi' },
     ],
   },
