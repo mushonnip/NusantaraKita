@@ -17,8 +17,8 @@ Nusantara Kita adalah sebuah API yang menyediakan data wilayah Indonesia. Projec
 
 URL:
 
-- API = [https://api-nusakita.vercel.app](https://api-nusakita.vercel.app)
-- DOKUMENTASI = [https://nusakita.vercel.app](https://nusakita.vercel.app)
+- API = [https://api-nusantarakita.vercel.app](https://api-nusantarakita.vercel.app)
+- DOKUMENTASI = [https://nusantarakita.vercel.app](https://nusantarakita.vercel.app)
 
 ENDPOINT:
 
@@ -48,19 +48,14 @@ Langkah-langkah cara install project ini dilokal :
 Git clone API nya:
 
 ```bash
-git clone --filter=blob:none --no-checkout https://github.com/Yuefii/NusantaraKita.git
-cd NusantaraKita
-git sparse-checkout set api
-git checkout
+git clone --filter=blob:none --no-checkout https://github.com/Yuefii/NusantaraKita.git && cd NusantaraKita && git sparse-checkout set api data && git checkout
 ```
 
-Masuk ke directori API:
+Setup Environmentnya:
 
 ```bash
 cd api
 ```
-
-Setup Environmentnya:
 
 ```bash
 cp .env.example .env
@@ -80,20 +75,33 @@ Menjalankan Projectnya menggunakan `pip`
   ```bash
   pip install -r requirements.txt
   ```
-- Running project:
+- running project:
   ```bash
-  uvicorn generate:app --reload
+  uvicorn main:app --reload
   ```
-- Testing project:
+- testing project:
   ```bash
   pytest tests/
   ```
+
+Menjalankan Projectnya menggunakan `docker`
+
+- setelah clone project kamu bisa langsung menjalankan projectnya dengan mudah menggunakan perintah:
+  ```bash
+  docker-compose up -d
+  ```
+  atau gunakan perintah ini untuk memperbarui docker image:
+  ```bash
+  docker-compose pull && docker-compose up -d
+  ```
+
 
 ## References
 
 Dataset yang digunakan dalam project ini berasal dari:
 
 - [https://github.com/cahyadsn/wilayah_boundaries](https://github.com/cahyadsn/wilayah_boundaries)
+- [https://github.com/cahyadsn/wilayah_kodepos](https://github.com/cahyadsn/wilayah_kodepos)
 
 Kami sangat menghargai pembuat dataset ini. Tanpa adanya data tersebut, project ini tidak akan bisa dikembangkan.
 

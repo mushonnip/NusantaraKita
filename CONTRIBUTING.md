@@ -5,7 +5,7 @@ Kami menyambut baik kontribusi pada project Nusantara Kita! Untuk memastikan lin
 ## Cara Berkontribusi
 
 1.  **Fork repositori:** Mulailah dengan melakukan forking repositori `NusantaraKita` ke akun GitHub Anda.
-2.  **Clone fork Anda:** Klon repositori yang telah Anda fork ke mesin lokal Anda.
+2.  **Clone fork Anda:** Clone repositori yang telah Anda fork ke mesin lokal Anda.
     ```bash
     git clone https://github.com/USERNAME_ANDA/NusantaraKita.git
     cd NusantaraKita
@@ -30,7 +30,7 @@ Kami menyambut baik kontribusi pada project Nusantara Kita! Untuk memastikan lin
 
 ## Gaya Kode
 
-Harap patuhi gaya kode yang ada di proyek. Kami menggunakan `black` untuk pemformatan Python dan `eslint` untuk TypeScript/JavaScript.
+Harap patuhi gaya kode yang ada di project. Kami menggunakan `black`, `ruff` untuk pemformatan Python dan `prettier`, `eslint` untuk TypeScript yang ada pada react.
 
 ## Melaporkan Bug
 
