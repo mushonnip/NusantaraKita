@@ -4,10 +4,7 @@ import { useIsTablet } from '@/hooks/use-tablet';
 import { cn } from '@/lib/utils';
 
 const cloneCommand = [
-  'git clone --filter=blob:none --no-checkout https://github.com/Yuefii/NusantaraKita.git',
-  'cd NusantaraKita',
-  'git sparse-checkout set api',
-  'git checkout',
+  'git clone --filter=blob:none --no-checkout https://github.com/Yuefii/NusantaraKita.git && cd NusantaraKita && git sparse-checkout set api data && git checkout',
 ].join('\n');
 
 export const InstalationGuide = () => {
@@ -104,7 +101,7 @@ export const InstalationGuide = () => {
             Jalankan Project
           </h3>
           <Code
-            content={`uvicorn generate:app --reload`}
+            content={`uvicorn main:app --reload`}
             showCopyButton
           />
         </div>
@@ -118,6 +115,20 @@ export const InstalationGuide = () => {
             showCopyButton
           />
         </div>
+      </div>
+      
+      {/* Section Running API with Docker */}
+      <div className="mb-10">
+        <h2 className="mb-4 text-xl font-semibold text-gray-600">
+          Menjalankan Project dengan Docker
+        </h2>
+        <p className="mb-4 leading-relaxed text-gray-600">
+          Setelah clone project kamu bisa menjalankan project dengan mudah menggunakan perintah:
+        </p>
+        <Code
+          content={`docker-compose up -d`}
+          showCopyButton
+        />
       </div>
     </section>
   );
