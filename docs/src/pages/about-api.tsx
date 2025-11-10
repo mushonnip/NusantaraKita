@@ -27,7 +27,7 @@ const developers: ProfileCardProps[] = [
     ],
   },
   {
-    name: 'Arif Ramdhan',
+    name: 'Arif Rhamadan',
     role: 'Data Engineer',
     avatarUrl: 'arifrhamadan.jpeg',
     socialLinks: [
