@@ -2,6 +2,7 @@ type ParamsApi = {
   pagination?: boolean; // Menampilkan/menyembunyikan informasi paginasi (true/false)
   limit?: number; // Menentukan jumlah item per halaman
   halaman?: number; // Menentukan halaman yang ingin ditampilkan
+  search?: string; // Pencarian berdasarkan nama
 };
 
 type PaginationApi = {

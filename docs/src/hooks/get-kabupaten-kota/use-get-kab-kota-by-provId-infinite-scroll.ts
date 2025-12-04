@@ -13,6 +13,7 @@ export const getKabKotaByProvIdInfinite = async (
       pagination: params.pagination,
       limit: params.limit,
       halaman: params.halaman,
+      search: params.search,
     },
   });
   return response.data;
@@ -28,6 +29,7 @@ const useGetKabKotaByProvIdInfiniteScroll = (
       params.kodeProvinsi,
       params.limit,
       params.pagination,
+      params.search,
     ],
     queryFn: ({ pageParam }) =>
       getKabKotaByProvIdInfinite({ ...params, halaman: pageParam }),

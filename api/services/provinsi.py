@@ -7,15 +7,21 @@ from models.provinsi import Provinsi, ProvinsiListResponse, PaginatedProvinsiRes
 
 class ProvinsiService:
     async def get(
-        self, limit: int, halaman: int, pagination: bool
+        self, limit: int, halaman: int, pagination: bool, search: str = None
     ) -> Union[ProvinsiListResponse, PaginatedProvinsiResponse]:
         conn = await get_connection()
         async with conn.cursor(aiomysql.DictCursor) as cursor:
             try:
+                # Build WHERE clause for search
+                where_clause = ""
+                params = []
+                if search:
+                    where_clause = " WHERE nama LIKE %s"
+                    params.append(f"%{search}%")
+
                 if not pagination:
-                    await cursor.execute(
-                        "SELECT kode, nama, lat, lng  FROM nk_provinsi"
-                    )
+                    query = f"SELECT kode, nama, lat, lng FROM nk_provinsi{where_clause}"
+                    await cursor.execute(query, params)
                     data: List[Provinsi] = await cursor.fetchall()
                     if not data:
                         raise Exception("tidak ditemukan data")
@@ -32,9 +38,10 @@ class ProvinsiService:
                         "nomor halaman tidak valid, halaman harus lebih besar dari 0"
                     )
 
-                await cursor.execute("SELECT COUNT(*) AS total FROM nk_provinsi")
+                count_query = f"SELECT COUNT(*) AS total FROM nk_provinsi{where_clause}"
+                await cursor.execute(count_query, params)
                 total_item: int = (await cursor.fetchone())["total"]
-                total_halaman: int = -(-total_item // limit)
+                total_halaman: int = -(-total_item // limit) if total_item > 0 else 1
 
                 if halaman > total_halaman:
                     raise Exception(
@@ -42,10 +49,9 @@ class ProvinsiService:
                     )
 
                 offset: int = (halaman - 1) * limit
-                await cursor.execute(
-                    "SELECT kode, nama, lat, lng FROM nk_provinsi LIMIT %s OFFSET %s",
-                    (limit, offset),
-                )
+                query = f"SELECT kode, nama, lat, lng FROM nk_provinsi{where_clause} LIMIT %s OFFSET %s"
+                params.extend([limit, offset])
+                await cursor.execute(query, params)
                 data: List[Provinsi] = await cursor.fetchall()
 
                 if not data:

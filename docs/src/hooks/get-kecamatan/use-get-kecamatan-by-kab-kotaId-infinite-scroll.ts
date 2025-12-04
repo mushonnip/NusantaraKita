@@ -14,6 +14,7 @@ export const getKecamatanByKabKotaIdInfinite = async (
       pagination: params.pagination,
       limit: params.limit,
       halaman: params.halaman,
+      search: params.search,
     },
   });
   return response.data;
@@ -30,6 +31,7 @@ const useGetKecamatanByKabKotaIdInfiniteScroll = (
       params.kodeKabKota,
       params.limit,
       params.pagination,
+      params.search,
     ],
     queryFn: ({ pageParam }) =>
       getKecamatanByKabKotaIdInfinite({ ...params, halaman: pageParam }),

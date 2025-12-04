@@ -11,15 +11,21 @@ from models.kecamatan import (
 
 class KecamatanService:
     async def get(
-        self, limit: int, halaman: int, pagination: bool
+        self, limit: int, halaman: int, pagination: bool, search: str = None
     ) -> Union[KecamatanListResponse, PaginatedKecamatanResponse]:
         conn = await get_connection()
         async with conn.cursor(aiomysql.DictCursor) as cursor:
             try:
+                # Build WHERE clause for search
+                where_clause = ""
+                params = []
+                if search:
+                    where_clause = " WHERE nama LIKE %s"
+                    params.append(f"%{search}%")
+
                 if not pagination:
-                    await cursor.execute(
-                        "SELECT kode, nama, lat, lng, kode_kabupaten_kota FROM nk_kecamatan"
-                    )
+                    query = f"SELECT kode, nama, lat, lng, kode_kabupaten_kota FROM nk_kecamatan{where_clause}"
+                    await cursor.execute(query, params)
                     data: List[Kecamatan] = await cursor.fetchall()
                     if not data:
                         raise Exception("tidak ditemukan data")
@@ -36,9 +42,10 @@ class KecamatanService:
                         "nomor halaman tidak valid, halaman harus lebih besar dari 0"
                     )
 
-                await cursor.execute("SELECT COUNT(*) AS total FROM nk_kecamatan")
+                count_query = f"SELECT COUNT(*) AS total FROM nk_kecamatan{where_clause}"
+                await cursor.execute(count_query, params)
                 total_item: int = (await cursor.fetchone())["total"]
-                total_halaman: int = -(-total_item // limit)
+                total_halaman: int = -(-total_item // limit) if total_item > 0 else 1
 
                 if halaman > total_halaman:
                     raise Exception(
@@ -46,10 +53,9 @@ class KecamatanService:
                     )
 
                 offset: int = (halaman - 1) * limit
-                await cursor.execute(
-                    "SELECT kode, nama, lat, lng, kode_kabupaten_kota FROM nk_kecamatan LIMIT %s OFFSET %s",
-                    (limit, offset),
-                )
+                query = f"SELECT kode, nama, lat, lng, kode_kabupaten_kota FROM nk_kecamatan{where_clause} LIMIT %s OFFSET %s"
+                params.extend([limit, offset])
+                await cursor.execute(query, params)
                 data: List[Kecamatan] = await cursor.fetchall()
 
                 if not data:
@@ -73,16 +79,21 @@ class KecamatanService:
                 conn.close()
 
     async def get_by_kabupaten_kota(
-        self, kode_kabupaten_kota: str, limit: int, halaman: int, pagination: bool
+        self, kode_kabupaten_kota: str, limit: int, halaman: int, pagination: bool, search: str = None
     ) -> Union[KecamatanListResponse, PaginatedKecamatanResponse]:
         conn = await get_connection()
         async with conn.cursor(aiomysql.DictCursor) as cursor:
             try:
+                # Build WHERE clause
+                where_clause = " WHERE kode_kabupaten_kota = %s"
+                params = [kode_kabupaten_kota]
+                if search:
+                    where_clause += " AND nama LIKE %s"
+                    params.append(f"%{search}%")
+
                 if not pagination:
-                    await cursor.execute(
-                        "SELECT kode, nama, lat, lng, kode_kabupaten_kota FROM nk_kecamatan WHERE kode_kabupaten_kota = %s",
-                        (kode_kabupaten_kota,),
-                    )
+                    query = f"SELECT kode, nama, lat, lng, kode_kabupaten_kota FROM nk_kecamatan{where_clause}"
+                    await cursor.execute(query, params)
                     data: List[Kecamatan] = await cursor.fetchall()
                     if not data:
                         raise Exception(
@@ -101,12 +112,10 @@ class KecamatanService:
                         "nomor halaman tidak valid, halaman harus lebih besar dari 0"
                     )
 
-                await cursor.execute(
-                    "SELECT COUNT(*) AS total FROM nk_kecamatan WHERE kode_kabupaten_kota = %s",
-                    (kode_kabupaten_kota,),
-                )
+                count_query = f"SELECT COUNT(*) AS total FROM nk_kecamatan{where_clause}"
+                await cursor.execute(count_query, params)
                 total_item: int = (await cursor.fetchone())["total"]
-                total_halaman: int = -(-total_item // limit)
+                total_halaman: int = -(-total_item // limit) if total_item > 0 else 1
 
                 if halaman > total_halaman:
                     raise Exception(
@@ -114,10 +123,9 @@ class KecamatanService:
                     )
 
                 offset: int = (halaman - 1) * limit
-                await cursor.execute(
-                    "SELECT kode, nama, lat, lng, kode_kabupaten_kota FROM nk_kecamatan WHERE kode_kabupaten_kota = %s LIMIT %s OFFSET %s",
-                    (kode_kabupaten_kota, limit, offset),
-                )
+                query = f"SELECT kode, nama, lat, lng, kode_kabupaten_kota FROM nk_kecamatan{where_clause} LIMIT %s OFFSET %s"
+                params.extend([limit, offset])
+                await cursor.execute(query, params)
                 data: List[Kecamatan] = await cursor.fetchall()
 
                 if not data:

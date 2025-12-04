@@ -11,6 +11,7 @@ export const getProvinsiInfinite = async (
       pagination: params.pagination,
       limit: params.limit,
       halaman: params.halaman,
+      search: params.search,
     },
   });
   return response.data;
@@ -21,7 +22,7 @@ const useGetProvinsiInfiniteScroll = (
   queryOptions?: { enabled?: boolean },
 ) => {
   return useInfiniteQuery({
-    queryKey: ['provinsi-infinite', params.limit, params.pagination],
+    queryKey: ['provinsi-infinite', params.limit, params.pagination, params.search],
     queryFn: ({ pageParam }) =>
       getProvinsiInfinite({ ...params, halaman: pageParam }),
     initialPageParam: 1,

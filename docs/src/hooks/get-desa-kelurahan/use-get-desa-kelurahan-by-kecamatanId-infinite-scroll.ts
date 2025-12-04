@@ -14,6 +14,7 @@ export const getDesaByKecamatanIdInfinite = async (
       pagination: params.pagination,
       limit: params.limit,
       halaman: params.halaman,
+      search: params.search,
     },
   });
   return response.data;
@@ -30,6 +31,7 @@ const useGetDesaByKecamatanIdInfiniteScroll = (
       params.kodeKecamatan,
       params.limit,
       params.pagination,
+      params.search,
     ],
     queryFn: ({ pageParam }) =>
       getDesaByKecamatanIdInfinite({ ...params, halaman: pageParam }),

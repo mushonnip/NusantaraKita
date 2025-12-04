@@ -3,10 +3,11 @@ import useGetDesaByKecamatanIdInfiniteScroll from '@/hooks/get-desa-kelurahan/us
 import useGetKabKotaByProvIdInfiniteScroll from '@/hooks/get-kabupaten-kota/use-get-kab-kota-by-provId-infinite-scroll';
 import useGetKecamatanByKabKotaIdInfiniteScroll from '@/hooks/get-kecamatan/use-get-kecamatan-by-kab-kotaId-infinite-scroll';
 import useGetProvinsiInfiniteScroll from '@/hooks/get-provinsi/use-get-provinsi-infinite-scroll';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Label } from '../ui/label';
 import { MapSelect } from '../ui/map-select';
 import { Switch } from '../ui/switch';
+import { Input } from '../ui/input';
 
 const queryOptions: Pick<ParamsApi, 'pagination' | 'limit'> = {
   pagination: true,
@@ -16,10 +17,57 @@ const queryOptions: Pick<ParamsApi, 'pagination' | 'limit'> = {
 const OverViewSelects = () => {
   const { state, dispatch } = useOverview();
 
+  // Search states
+  const [searchProvinsi, setSearchProvinsi] = useState('');
+  const [searchKabKota, setSearchKabKota] = useState('');
+  const [searchKecamatan, setSearchKecamatan] = useState('');
+  const [searchDesaKel, setSearchDesaKel] = useState('');
+
+  // Debounced search values
+  const [debouncedSearchProvinsi, setDebouncedSearchProvinsi] = useState('');
+  const [debouncedSearchKabKota, setDebouncedSearchKabKota] = useState('');
+  const [debouncedSearchKecamatan, setDebouncedSearchKecamatan] = useState('');
+  const [debouncedSearchDesaKel, setDebouncedSearchDesaKel] = useState('');
+
+  // Debounce effect for Provinsi
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchProvinsi(searchProvinsi);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchProvinsi]);
+
+  // Debounce effect for KabKota
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchKabKota(searchKabKota);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchKabKota]);
+
+  // Debounce effect for Kecamatan
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchKecamatan(searchKecamatan);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchKecamatan]);
+
+  // Debounce effect for DesaKel
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchDesaKel(searchDesaKel);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchDesaKel]);
+
   // Provinsi query
-  const provinsiQuery = useGetProvinsiInfiniteScroll(queryOptions, {
-    enabled: true,
-  });
+  const provinsiQuery = useGetProvinsiInfiniteScroll(
+    { ...queryOptions, search: debouncedSearchProvinsi || undefined },
+    {
+      enabled: true,
+    },
+  );
   const kodeProvinsi = useMemo(
     () => state.selected.province?.kode || '',
     [state.selected.province],
@@ -31,7 +79,11 @@ const OverViewSelects = () => {
 
   // KabKota query
   const kabKotaQuery = useGetKabKotaByProvIdInfiniteScroll(
-    { kodeProvinsi, ...queryOptions },
+    {
+      kodeProvinsi,
+      ...queryOptions,
+      search: debouncedSearchKabKota || undefined,
+    },
     { enabled: shouldFetchKabKota },
   );
   const kodeKabKota = useMemo(
@@ -45,7 +97,11 @@ const OverViewSelects = () => {
 
   // Kecamatan query
   const kecamatanQuery = useGetKecamatanByKabKotaIdInfiniteScroll(
-    { kodeKabKota, ...queryOptions },
+    {
+      kodeKabKota,
+      ...queryOptions,
+      search: debouncedSearchKecamatan || undefined,
+    },
     { enabled: shouldFetchKecamatan },
   );
   const kodeKecamatan = useMemo(
@@ -59,7 +115,11 @@ const OverViewSelects = () => {
 
   // DesaKel query
   const desaKelQuery = useGetDesaByKecamatanIdInfiniteScroll(
-    { kodeKecamatan, ...queryOptions },
+    {
+      kodeKecamatan,
+      ...queryOptions,
+      search: debouncedSearchDesaKel || undefined,
+    },
     { enabled: shouldFetchDesaKel },
   );
 
@@ -145,7 +205,15 @@ const OverViewSelects = () => {
     <div className="mb-5 space-y-4">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
         {/* Provinsi */}
-        <MapSelect
+        <div className="space-y-2">
+          <Input
+            type="text"
+            placeholder="Cari provinsi..."
+            value={searchProvinsi}
+            onChange={(e) => setSearchProvinsi(e.target.value)}
+            className="w-full"
+          />
+          <MapSelect
           data={provinsiData}
           selectedValue={state.selected.province}
           onSelect={handleSelectProvinsi}
@@ -157,10 +225,20 @@ const OverViewSelects = () => {
           hasNextPage={provinsiQuery.hasNextPage}
           isFetchingNextPage={provinsiQuery.isFetchingNextPage}
           onReachEnd={handleReachEndProvinsi}
-        />
+          />
+        </div>
 
         {/* KabKota */}
-        <MapSelect
+        <div className="space-y-2">
+          <Input
+            type="text"
+            placeholder="Cari kabupaten/kota..."
+            value={searchKabKota}
+            onChange={(e) => setSearchKabKota(e.target.value)}
+            className="w-full"
+            disabled={!state.selected.province}
+          />
+          <MapSelect
           data={kabKotaData}
           selectedValue={state.selected.kabKota}
           onSelect={handleSelectKabKota}
@@ -173,10 +251,20 @@ const OverViewSelects = () => {
           isFetchingNextPage={kabKotaQuery.isFetchingNextPage}
           onReachEnd={handleReachEndKabKota}
           disabled={!state.selected.province}
-        />
+          />
+        </div>
 
         {/* Kecamatan */}
-        <MapSelect
+        <div className="space-y-2">
+          <Input
+            type="text"
+            placeholder="Cari kecamatan..."
+            value={searchKecamatan}
+            onChange={(e) => setSearchKecamatan(e.target.value)}
+            className="w-full"
+            disabled={!state.selected.kabKota}
+          />
+          <MapSelect
           data={kecamatanData}
           selectedValue={state.selected.kecamatan}
           onSelect={handleSelectKecamatan}
@@ -189,10 +277,20 @@ const OverViewSelects = () => {
           isFetchingNextPage={kecamatanQuery.isFetchingNextPage}
           onReachEnd={handleReachEndKecamatan}
           disabled={!state.selected.kabKota}
-        />
+          />
+        </div>
 
         {/* desa/kelurahan */}
-        <MapSelect
+        <div className="space-y-2">
+          <Input
+            type="text"
+            placeholder="Cari desa/kelurahan..."
+            value={searchDesaKel}
+            onChange={(e) => setSearchDesaKel(e.target.value)}
+            className="w-full"
+            disabled={!state.selected.kecamatan}
+          />
+          <MapSelect
           data={desaKelData}
           selectedValue={state.selected.desaKel}
           onSelect={handleSelectDesaKel}
@@ -205,7 +303,8 @@ const OverViewSelects = () => {
           isFetchingNextPage={desaKelQuery.isFetchingNextPage}
           onReachEnd={handleReachEndDesaKel}
           disabled={!state.selected.kecamatan}
-        />
+          />
+        </div>
       </div>
 
       {/* Switch */}

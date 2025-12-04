@@ -17,9 +17,10 @@ async def get_provinsi(
     limit: int = Query(10, ge=1),
     halaman: int = Query(1, ge=1),
     pagination: bool = Query(True),
+    search: str = Query(None),
 ):
     try:
-        return await provinsi.get(limit, halaman, pagination)
+        return await provinsi.get(limit, halaman, pagination, search)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -29,9 +30,10 @@ async def get_kabupatan_kota(
     limit: int = Query(10, ge=1),
     halaman: int = Query(1, ge=1),
     pagination: bool = Query(True),
+    search: str = Query(None),
 ):
     try:
-        return await kabupaten_kota.get(limit, halaman, pagination)
+        return await kabupaten_kota.get(limit, halaman, pagination, search)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -42,10 +44,11 @@ async def get_by_provinsi(
     limit: int = Query(10, gt=0),
     halaman: int = Query(1, gt=0),
     pagination: bool = Query(True),
+    search: str = Query(None),
 ):
     try:
         result = await kabupaten_kota.get_by_provinsi(
-            kode_provinsi, limit, halaman, pagination
+            kode_provinsi, limit, halaman, pagination, search
         )
         return result
     except Exception as e:
@@ -57,9 +60,10 @@ async def get_kecamatan(
     limit: int = Query(10, ge=1),
     halaman: int = Query(1, ge=1),
     pagination: bool = Query(True),
+    search: str = Query(None),
 ):
     try:
-        return await kecamatan.get(limit, halaman, pagination)
+        return await kecamatan.get(limit, halaman, pagination, search)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -70,10 +74,11 @@ async def get_by_kabupaten_kota(
     limit: int = Query(10, gt=0),
     halaman: int = Query(1, gt=0),
     pagination: bool = Query(True),
+    search: str = Query(None),
 ):
     try:
         result = await kecamatan.get_by_kabupaten_kota(
-            kode_kabupaten_kota, limit, halaman, pagination
+            kode_kabupaten_kota, limit, halaman, pagination, search
         )
         return result
     except Exception as e:
@@ -85,9 +90,10 @@ async def get_desa_kelurahan(
     limit: int = Query(10, ge=1),
     halaman: int = Query(1, ge=1),
     pagination: bool = Query(True),
+    search: str = Query(None),
 ):
     try:
-        return await desa_kelurahan.get(limit, halaman, pagination)
+        return await desa_kelurahan.get(limit, halaman, pagination, search)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -98,10 +104,11 @@ async def get_by_desa_kelurahan(
     limit: int = Query(10, gt=0),
     halaman: int = Query(1, gt=0),
     pagination: bool = Query(True),
+    search: str = Query(None),
 ):
     try:
         result = await desa_kelurahan.get_by_kecamatan(
-            kode_kecamatan, limit, halaman, pagination
+            kode_kecamatan, limit, halaman, pagination, search
         )
         return result
     except Exception as e:
