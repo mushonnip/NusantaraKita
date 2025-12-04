@@ -86,15 +86,39 @@ Menjalankan Projectnya menggunakan `pip`
 
 Menjalankan Projectnya menggunakan `docker`
 
-- setelah clone project kamu bisa langsung menjalankan projectnya dengan mudah menggunakan perintah:
+- setup environment variables:
+  ```bash
+  cp .env.example .env
+  ```
+
+  Silakan sesuaikan `.env` atau gunakan default:
+  ```env
+  # Database Configuration
+  MYSQL_ROOT_PASSWORD=rootpassword
+  MYSQL_USER=user
+  MYSQL_PASSWORD=password
+  MYSQL_DB=nusantarakita
+
+  # Port Configuration
+  DB_PORT=3307        # Port untuk database MySQL
+  API_PORT=8000       # Port untuk API
+  DOCS_PORT=3000      # Port untuk dokumentasi
+  ```
+
+- menjalankan semua services (database, API, dan dokumentasi):
   ```bash
   docker-compose up -d
   ```
-  atau gunakan perintah ini untuk memperbarui docker image:
+
+- atau gunakan perintah ini untuk memperbarui docker image:
   ```bash
   docker-compose pull && docker-compose up -d
   ```
 
+- setelah services berjalan, Anda dapat mengakses:
+  - **API**: http://localhost:8000 (atau port yang Anda set di `API_PORT`)
+  - **Dokumentasi**: http://localhost:3000 (atau port yang Anda set di `DOCS_PORT`)
+  - **Database**: localhost:3307 (atau port yang Anda set di `DB_PORT`)
 
 ## References
 

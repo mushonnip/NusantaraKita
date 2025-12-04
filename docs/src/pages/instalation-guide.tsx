@@ -111,21 +111,72 @@ export const InstalationGuide = () => {
         <h2 className="mb-4 text-xl font-semibold text-gray-600">
           Menjalankan Project dengan Docker
         </h2>
-        <p className="mb-4 leading-relaxed text-gray-600">
-          Setelah clone project kamu bisa menjalankan project dengan mudah
-          menggunakan perintah:
-        </p>
-        <Code
-          content={`docker-compose up -d`}
-          showCopyButton
-        />
-        <p className="my-4 leading-relaxed text-gray-600">
-          atau gunakan perintah ini untuk memperbarui docker image:
-        </p>
-        <Code
-          content={`docker-compose pull && docker-compose up -d`}
-          showCopyButton
-        />
+
+        <div className="mb-6">
+          <p className="mb-4 leading-relaxed text-gray-600">
+            Setup Environment Variables
+          </p>
+          <Code
+            content={`cp .env.example .env`}
+            showCopyButton
+          />
+          <p className="mt-4 leading-relaxed text-gray-600">
+            Silakan sesuaikan <code>.env</code> atau gunakan default:
+          </p>
+          <Code
+            content={`# Database Configuration
+MYSQL_ROOT_PASSWORD=rootpassword
+MYSQL_USER=user
+MYSQL_PASSWORD=password
+MYSQL_DB=nusantarakita
+
+# Port Configuration
+DB_PORT=3307        # Port untuk database MySQL
+API_PORT=8000       # Port untuk API
+DOCS_PORT=3000      # Port untuk dokumentasi`}
+            showCopyButton
+          />
+        </div>
+
+        <div className="mb-6">
+          <p className="mb-4 leading-relaxed text-gray-600">
+            Menjalankan semua services (database, API, dan dokumentasi)
+          </p>
+          <Code
+            content={`docker-compose up -d`}
+            showCopyButton
+          />
+        </div>
+
+        <div className="mb-6">
+          <p className="mb-4 leading-relaxed text-gray-600">
+            Atau gunakan perintah ini untuk memperbarui docker image:
+          </p>
+          <Code
+            content={`docker-compose pull && docker-compose up -d`}
+            showCopyButton
+          />
+        </div>
+
+        <div className="mb-6">
+          <p className="mb-4 leading-relaxed text-gray-600">
+            Setelah services berjalan, Anda dapat mengakses:
+          </p>
+          <ul className="ml-6 list-disc space-y-2 text-gray-600">
+            <li>
+              <strong>API:</strong> http://localhost:8000 (atau port yang Anda
+              set di <code>API_PORT</code>)
+            </li>
+            <li>
+              <strong>Dokumentasi:</strong> http://localhost:3000 (atau port
+              yang Anda set di <code>DOCS_PORT</code>)
+            </li>
+            <li>
+              <strong>Database:</strong> localhost:3307 (atau port yang Anda set
+              di <code>DB_PORT</code>)
+            </li>
+          </ul>
+        </div>
       </div>
     </section>
   );

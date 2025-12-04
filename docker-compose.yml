@@ -6,12 +6,12 @@ services:
     container_name: nusantarakita_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: nusantarakita
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${MYSQL_DB:-nusantarakita}
+      MYSQL_USER: ${MYSQL_USER:-user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
     ports:
-      - "3307:3306"
+      - "${DB_PORT:-3307}:3306"
     volumes:
       - db_data:/var/lib/mysql
       - ./data/mysql/nusakita.sql:/docker-entrypoint-initdb.d/init.sql
@@ -25,16 +25,29 @@ services:
     container_name: nusantarakita_api
     restart: always
     ports:
-      - "8000:8000"
+      - "${API_PORT:-8000}:8000"
     environment:
       MYSQL_HOST: db
       MYSQL_PORT: 3306
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_DB: nusantarakita
+      MYSQL_USER: ${MYSQL_USER:-user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
+      MYSQL_DB: ${MYSQL_DB:-nusantarakita}
     depends_on:
       db:
         condition: service_healthy
+
+  docs:
+    build:
+      context: ./docs
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+    container_name: nusantarakita_docs
+    restart: always
+    ports:
+      - "${DOCS_PORT:-3000}:80"
+    depends_on:
+      - api
 
 volumes:
   db_data:
